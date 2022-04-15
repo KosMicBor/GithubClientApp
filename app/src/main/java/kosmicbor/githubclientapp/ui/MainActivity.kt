@@ -1,7 +1,8 @@
-package kosmicbor.githubclientapp
+package kosmicbor.githubclientapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kosmicbor.githubclientapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
