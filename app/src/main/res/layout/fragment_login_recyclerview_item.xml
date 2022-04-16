@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_login_item_cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fragment_login_item_cardview_margin"
+    android:elevation="@dimen/fragment_login_item_cardview_elevation"
+    app:cardCornerRadius="@dimen/fragment_login_item_cardview_corner_radius">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_login_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/fragment_login_item_container_padding">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/fragment_login_user_avatar"
+            android:layout_width="@dimen/fragment_login_user_avatar_width"
+            android:layout_height="@dimen/fragment_login_user_avatar_height"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintEnd_toStartOf="@id/fragment_login_user_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/fragment_login_user_name"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/fragment_login_user_name_text_size"
+            app:layout_constraintBottom_toBottomOf="@id/fragment_login_user_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fragment_login_user_avatar"
+            app:layout_constraintTop_toTopOf="@id/fragment_login_user_avatar"
+            tools:text="KosMicBor" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
