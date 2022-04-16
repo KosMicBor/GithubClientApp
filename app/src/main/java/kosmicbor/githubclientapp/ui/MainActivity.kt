@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         supportFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
             .replace(R.id.main_container, LoginFragment())
+            .addToBackStack("LoginScreen")
             .commit()
     }
 }

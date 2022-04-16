@@ -69,6 +69,7 @@ class MockGithubRepositoryImpl : GitHubRepository {
         usersList.forEach { user ->
             if (user.id == id) {
                 onGetUserListener.getUserRequestSuccess(user)
+                return
             }
         }
 
