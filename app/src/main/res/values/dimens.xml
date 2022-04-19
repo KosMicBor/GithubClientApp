@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragment_login_recyclerview_margin_top">16dp</dimen>
+    <dimen name="_0dp">0dp</dimen>
+    <dimen name="fragment_login_title_text_size">24sp</dimen>
+    <dimen name="fragment_login_title_margin">16dp</dimen>
+    <dimen name="fragment_login_logo_margin">16dp</dimen>
+    <dimen name="fragment_login_logo_width">36dp</dimen>
+    <dimen name="fragment_login_logo_height">36dp</dimen>
+    <dimen name="fragment_login_item_cardview_elevation">8dp</dimen>
+    <dimen name="fragment_profile_item_cardview_elevation">8dp</dimen>
+    <dimen name="fragment_login_item_cardview_corner_radius">4dp</dimen>
+    <dimen name="fragment_profile_item_cardview_corner_radius">4dp</dimen>
+    <dimen name="fragment_login_item_cardview_margin">5dp</dimen>
+    <dimen name="fragment_profile_item_cardview_margin">5dp</dimen>
+    <dimen name="fragment_login_item_container_padding">8dp</dimen>
+    <dimen name="fragment_login_user_avatar_width">36dp</dimen>
+    <dimen name="fragment_login_user_avatar_height">36dp</dimen>
+    <dimen name="fragment_login_user_name_text_size">24sp</dimen>
+    <dimen name="fragment_profile_user_name_text_size">24sp</dimen>
+    <dimen name="fragment_profile_user_avatar_margin">16dp</dimen>
+    <dimen name="fragment_profile_user_name_textsize">36sp</dimen>
+    <dimen name="fragment_profile_recyclerview_padding">16dp</dimen>
+</resources>

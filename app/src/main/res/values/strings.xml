@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Github Client App</string>
+    <string name="fragment_login_title_text">Choose your GitHub account:</string>
 </resources>
