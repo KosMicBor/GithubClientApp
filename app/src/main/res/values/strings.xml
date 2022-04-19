@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Github Client App</string>
     <string name="fragment_login_title_text">Choose your GitHub account:</string>
+    <string name="or_text">OR</string>
+    <string name="fragment_login_text_input_layout_hint">input user login here to add</string>
+    <string name="fragment_login_add_button_text">add user</string>
 </resources>

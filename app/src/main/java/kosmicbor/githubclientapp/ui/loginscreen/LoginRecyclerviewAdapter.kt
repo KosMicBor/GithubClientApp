@@ -11,6 +11,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.databinding.FragmentLoginRecyclerviewItemBinding
+import kosmicbor.githubclientapp.domain.GithubUserEntity
 import kosmicbor.githubclientapp.domain.User
 import kosmicbor.githubclientapp.ui.userprofilescreen.ProfileFragment
 import kosmicbor.githubclientapp.utils.DiffUtilCallback
@@ -22,7 +23,7 @@ class LoginRecyclerviewAdapter : RecyclerView.Adapter<LoginRecyclerviewAdapter.L
         private const val USER_ID = "USER_ID"
     }
 
-    private val usersList = mutableListOf<User>()
+    private val usersList = mutableListOf<GithubUserEntity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LoginViewHolder {
 
@@ -37,7 +38,7 @@ class LoginRecyclerviewAdapter : RecyclerView.Adapter<LoginRecyclerviewAdapter.L
     override fun onBindViewHolder(holder: LoginViewHolder, position: Int) {
         holder.apply {
             userAvatar.load(usersList[position].avatarUrl)
-            userName.text = usersList[position].name
+            userName.text = usersList[position].login
             item.setOnClickListener {
                 val activity = it.context as AppCompatActivity
                 openProfileFragment(usersList[position].id, activity)
@@ -62,12 +63,19 @@ class LoginRecyclerviewAdapter : RecyclerView.Adapter<LoginRecyclerviewAdapter.L
     override fun getItemCount(): Int = usersList.size
 
 
-    fun fillUsersList(newUsersList: List<User>) {
-        val diffUtil = DiffUtilCallback(usersList, newUsersList)
-        val result = DiffUtil.calculateDiff(diffUtil)
-        usersList.clear()
-        usersList.addAll(newUsersList)
-        result.dispatchUpdatesTo(this)
+//    fun fillUsersList(newUsersList: List<User>) {
+//        val diffUtil = DiffUtilCallback(usersList, newUsersList)
+//        val result = DiffUtil.calculateDiff(diffUtil)
+//        usersList.clear()
+//        usersList.addAll(newUsersList)
+//        result.dispatchUpdatesTo(this)
+//    }
+
+    fun addUser(it: GithubUserEntity?) {
+        if (it != null) {
+            usersList.add(it)
+        }
+        notifyDataSetChanged()
     }
 
     inner class LoginViewHolder(binding: FragmentLoginRecyclerviewItemBinding) :

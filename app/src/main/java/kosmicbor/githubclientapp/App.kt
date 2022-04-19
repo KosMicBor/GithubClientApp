@@ -2,11 +2,12 @@ package kosmicbor.githubclientapp
 
 import android.app.Application
 import android.content.Context
-import kosmicbor.githubclientapp.data.MockGithubRepositoryImpl
+import kosmicbor.githubclientapp.data.retrofit.RetrofitGithubImpl
+import kosmicbor.githubclientapp.domain.GitHubRepository
 
 class App : Application() {
-    val githubRepo: MockGithubRepositoryImpl by lazy {
-        MockGithubRepositoryImpl()
+    val githubRepo: GitHubRepository by lazy {
+        RetrofitGithubImpl()
     }
 }
 
