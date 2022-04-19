@@ -1,4 +1,4 @@
-package kosmicbor.githubclientapp.data.retrofit
+package kosmicbor.githubclientapp.data.data.retrofit
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.reactivex.rxjava3.core.Single
@@ -22,10 +22,5 @@ class RetrofitGithubImpl : GitHubRepository {
 
     override fun getUserReposRequest(userLogin: String): Single<List<GithubUserRepoEntity>> {
         return api.listRepos(userLogin)
-    }
-
-    override fun getUsersListRequest(): List<GithubUserEntity> {
-        //NOTHING TO DO
-        return emptyList()
     }
 }

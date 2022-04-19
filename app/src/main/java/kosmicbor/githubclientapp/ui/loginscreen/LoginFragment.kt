@@ -12,14 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
+import kosmicbor.githubclientapp.App
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.app
+import kosmicbor.githubclientapp.data.room.LocalUserRepoImpl
 import kosmicbor.githubclientapp.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val viewModel: LoginViewModel by viewModels {
-        LoginViewModelFactory(requireActivity().app.githubRepo)
+        LoginViewModelFactory(
+            requireActivity().app.githubRepo,
+            requireActivity().app.localRepo
+        )
     }
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
     private val loginAdapter: LoginRecyclerviewAdapter = LoginRecyclerviewAdapter()
@@ -27,9 +32,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        if (savedInstanceState == null) {
-//            viewModel.getUsersList()
-//        }
+        if (savedInstanceState == null) {
+            viewModel.getUsersList()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,6 +55,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun initViewModel() {
+        viewModel.usersListLiveData.observe(viewLifecycleOwner) {
+            loginAdapter.fillUsersList(it)
+        }
+
         viewModel.userLiveData.observe(viewLifecycleOwner) {
             loginAdapter.addUser(it)
         }

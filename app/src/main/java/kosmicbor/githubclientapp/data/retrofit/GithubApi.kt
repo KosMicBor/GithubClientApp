@@ -1,4 +1,4 @@
-package kosmicbor.githubclientapp.data.retrofit
+package kosmicbor.githubclientapp.data.data.retrofit
 
 import io.reactivex.rxjava3.core.Single
 import kosmicbor.githubclientapp.domain.GithubUserEntity

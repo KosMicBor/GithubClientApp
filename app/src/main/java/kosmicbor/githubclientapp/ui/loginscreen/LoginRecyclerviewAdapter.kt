@@ -62,20 +62,19 @@ class LoginRecyclerviewAdapter : RecyclerView.Adapter<LoginRecyclerviewAdapter.L
 
     override fun getItemCount(): Int = usersList.size
 
-
-//    fun fillUsersList(newUsersList: List<User>) {
-//        val diffUtil = DiffUtilCallback(usersList, newUsersList)
-//        val result = DiffUtil.calculateDiff(diffUtil)
-//        usersList.clear()
-//        usersList.addAll(newUsersList)
-//        result.dispatchUpdatesTo(this)
-//    }
-
     fun addUser(it: GithubUserEntity?) {
         if (it != null) {
             usersList.add(it)
         }
-        notifyDataSetChanged()
+        notifyItemInserted(this.itemCount)
+    }
+
+    fun fillUsersList(newUsersList: List<GithubUserEntity>) {
+        val diffUtil = DiffUtilCallback(usersList, newUsersList)
+        val result = DiffUtil.calculateDiff(diffUtil)
+        usersList.clear()
+        usersList.addAll(newUsersList)
+        result.dispatchUpdatesTo(this)
     }
 
     inner class LoginViewHolder(binding: FragmentLoginRecyclerviewItemBinding) :
