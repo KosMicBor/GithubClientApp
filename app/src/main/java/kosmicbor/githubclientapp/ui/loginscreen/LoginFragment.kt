@@ -1,5 +1,6 @@
 package kosmicbor.githubclientapp.ui.loginscreen
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,6 +18,7 @@ import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.app
 import kosmicbor.githubclientapp.data.room.LocalUserRepoImpl
 import kosmicbor.githubclientapp.databinding.FragmentLoginBinding
+import java.lang.IllegalStateException
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -27,7 +29,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         )
     }
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
-    private val loginAdapter: LoginRecyclerviewAdapter = LoginRecyclerviewAdapter()
+
+    private val loginController by lazy {
+        activity as LoginController
+    }
+
+    private val loginAdapter: LoginRecyclerviewAdapter = LoginRecyclerviewAdapter {
+        loginController.openProfileScreen(it)
+    }
+
+    @Throws(IllegalStateException::class)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (activity !is LoginController) {
+            throw IllegalStateException(getString(R.string.wrong_activity_error_message))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,5 +102,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             layoutManager = LinearLayoutManager(context)
             this.adapter = loginAdapter
         }
+    }
+
+    interface LoginController {
+        fun openProfileScreen(login: String)
     }
 }

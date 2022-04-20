@@ -12,16 +12,11 @@ import com.google.android.material.textview.MaterialTextView
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.databinding.FragmentLoginRecyclerviewItemBinding
 import kosmicbor.githubclientapp.domain.GithubUserEntity
-import kosmicbor.githubclientapp.domain.User
-import kosmicbor.githubclientapp.ui.userprofilescreen.ProfileFragment
 import kosmicbor.githubclientapp.utils.DiffUtilCallback
 
 
-class LoginRecyclerviewAdapter : RecyclerView.Adapter<LoginRecyclerviewAdapter.LoginViewHolder>() {
-
-    companion object {
-        private const val USER_ID = "USER_ID"
-    }
+class LoginRecyclerviewAdapter(private val onItemClickCallback: (String) -> Unit) :
+    RecyclerView.Adapter<LoginRecyclerviewAdapter.LoginViewHolder>() {
 
     private val usersList = mutableListOf<GithubUserEntity>()
 
@@ -40,24 +35,14 @@ class LoginRecyclerviewAdapter : RecyclerView.Adapter<LoginRecyclerviewAdapter.L
             userAvatar.load(usersList[position].avatarUrl)
             userName.text = usersList[position].login
             item.setOnClickListener {
-                val activity = it.context as AppCompatActivity
-                openProfileFragment(usersList[position].id, activity)
-
+                onItemClickCallback(usersList[position].login)
             }
         }
     }
 
-    private fun openProfileFragment(userId: Int, activity: AppCompatActivity) {
+    private fun openProfileFragment(userLogin: String, activity: AppCompatActivity) {
 
-        val bundle = Bundle()
 
-        bundle.putInt(USER_ID, userId)
-
-        activity.supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .replace(R.id.main_container, ProfileFragment.newInstance(bundle))
-            .addToBackStack("ProfileScreen")
-            .commit()
     }
 
     override fun getItemCount(): Int = usersList.size

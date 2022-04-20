@@ -3,7 +3,7 @@ package kosmicbor.githubclientapp
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import kosmicbor.githubclientapp.data.data.retrofit.RetrofitGithubImpl
+import kosmicbor.githubclientapp.data.retrofit.RetrofitGithubImpl
 import kosmicbor.githubclientapp.data.room.LocalUserDataBase
 import kosmicbor.githubclientapp.data.room.LocalUserRepoImpl
 import kosmicbor.githubclientapp.domain.GitHubRepository

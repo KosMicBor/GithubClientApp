@@ -9,7 +9,7 @@ data class GithubUserRepoEntity(
     @SerializedName("id")
     val id: Int,
     @SerializedName("node_id")
-    val nodeId: Int,
+    val nodeId: String,
     @SerializedName("name")
     val name: String?,
     @SerializedName("description")

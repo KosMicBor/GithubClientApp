@@ -1,4 +1,4 @@
-package kosmicbor.githubclientapp.data.data.retrofit
+package kosmicbor.githubclientapp.data.retrofit
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.reactivex.rxjava3.core.Single
