@@ -1,8 +1,8 @@
 package kosmicbor.githubclientapp.domain
 
-import kosmicbor.githubclientapp.data.MockGithubRepositoryImpl
+import io.reactivex.rxjava3.core.Single
 
 interface GitHubRepository {
-    fun getUsersListRequest(): List<User>
-    fun getUserRequest(id: Int, onGetUserListener: MockGithubRepositoryImpl.OnGetUserListener)
+    fun getUserRequest(login: String): Single<GithubUserEntity>
+    fun getUserReposRequest(userLogin: String): Single<List<GithubUserRepoEntity>>
 }

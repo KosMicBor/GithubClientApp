@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/fragment_login_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/fragment_login_github_logo"
         android:layout_width="@dimen/fragment_login_logo_width"
@@ -25,14 +35,56 @@
         app:layout_constraintStart_toEndOf="@+id/fragment_login_github_logo"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/fragment_login_or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fragment_login_title_margin"
+        android:text="@string/or_text"
+        android:textSize="@dimen/or_text_size"
+        app:layout_constraintStart_toEndOf="@+id/fragment_login_github_logo"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_login_title" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fragment_login_text_input_layout"
+        android:layout_width="@dimen/_0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fragment_login_text_input_layout_margin"
+        android:hint="@string/fragment_login_text_input_layout_hint"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:hintEnabled="true"
+        app:layout_constraintEnd_toStartOf="@id/fragment_login_add_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_login_or">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fragment_login_text_input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fragment_login_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_0dp"
+        android:layout_marginEnd="@dimen/fragment_login_add_button_margin_end"
+        android:text="@string/fragment_login_add_button_text"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_login_text_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fragment_login_text_input_layout"
+        app:layout_constraintTop_toTopOf="@id/fragment_login_text_input_layout" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_login_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0dp"
         android:layout_marginTop="@dimen/fragment_login_recyclerview_margin_top"
+        android:padding="@dimen/fragment_login_recyclerview_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_login_title" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_login_text_input_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

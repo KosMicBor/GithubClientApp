@@ -17,8 +17,14 @@
     <dimen name="fragment_login_user_avatar_width">36dp</dimen>
     <dimen name="fragment_login_user_avatar_height">36dp</dimen>
     <dimen name="fragment_login_user_name_text_size">24sp</dimen>
-    <dimen name="fragment_profile_user_name_text_size">24sp</dimen>
+    <dimen name="fragment_profile_user_name_text_size">18sp</dimen>
     <dimen name="fragment_profile_user_avatar_margin">16dp</dimen>
-    <dimen name="fragment_profile_user_name_textsize">36sp</dimen>
+    <dimen name="fragment_profile_user_name_textsize">24sp</dimen>
     <dimen name="fragment_profile_recyclerview_padding">16dp</dimen>
+    <dimen name="or_text_size">24sp</dimen>
+    <dimen name="fragment_login_text_input_layout_margin">16dp</dimen>
+    <dimen name="fragment_login_add_button_margin_end">16dp</dimen>
+    <dimen name="fragment_login_recyclerview_padding">16dp</dimen>
+    <dimen name="fragment_profile_repos_title_margintop">16dp</dimen>
+    <dimen name="fragment_profile_repos_title_textsize">20sp</dimen>
 </resources>
