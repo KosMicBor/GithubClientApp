@@ -1,6 +1,5 @@
 package kosmicbor.githubclientapp.ui.loginscreen
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -9,16 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
-import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.databinding.FragmentLoginRecyclerviewItemBinding
-import kosmicbor.githubclientapp.domain.GithubUserEntity
+import kosmicbor.githubclientapp.data.retrofit.GithubUserEntityDTO
+import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.utils.DiffUtilCallback
 
 
 class LoginRecyclerviewAdapter(private val onItemClickCallback: (String) -> Unit) :
     RecyclerView.Adapter<LoginRecyclerviewAdapter.LoginViewHolder>() {
 
-    private val usersList = mutableListOf<GithubUserEntity>()
+    private val usersList = mutableListOf<GithubUser>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LoginViewHolder {
 
@@ -40,21 +39,16 @@ class LoginRecyclerviewAdapter(private val onItemClickCallback: (String) -> Unit
         }
     }
 
-    private fun openProfileFragment(userLogin: String, activity: AppCompatActivity) {
-
-
-    }
-
     override fun getItemCount(): Int = usersList.size
 
-    fun addUser(it: GithubUserEntity?) {
+    fun addUser(it: GithubUser?) {
         if (it != null) {
             usersList.add(it)
         }
         notifyItemInserted(this.itemCount)
     }
 
-    fun fillUsersList(newUsersList: List<GithubUserEntity>) {
+    fun fillUsersList(newUsersList: List<GithubUser>) {
         val diffUtil = DiffUtilCallback(usersList, newUsersList)
         val result = DiffUtil.calculateDiff(diffUtil)
         usersList.clear()

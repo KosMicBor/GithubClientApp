@@ -3,25 +3,23 @@ package kosmicbor.githubclientapp.ui.loginscreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.kotlin.subscribeBy
-import io.reactivex.rxjava3.schedulers.Schedulers
-import kosmicbor.githubclientapp.App
-import kosmicbor.githubclientapp.data.room.LocalUserRepoImpl
-import kosmicbor.githubclientapp.domain.GitHubRepository
-import kosmicbor.githubclientapp.domain.GithubUserEntity
-import kosmicbor.githubclientapp.domain.LocalUserRepository
+import kosmicbor.githubclientapp.domain.GithubUser
+import kosmicbor.githubclientapp.domain.usecases.AddNewLocalUserUseCase
+import kosmicbor.githubclientapp.domain.usecases.GetLocalUsersListUseCase
+import kosmicbor.githubclientapp.domain.usecases.RequestUserFromServerUseCase
+import kosmicbor.githubclientapp.utils.RequestCallback
 
 class LoginViewModel(
-    private val userRepo: GitHubRepository,
-    private val localRepo: LocalUserRepository
+    private val requestUserFromServerUseCase: RequestUserFromServerUseCase,
+    private val addNewLocalUserUseCase: AddNewLocalUserUseCase,
+    private val getLocalUsersListUseCase: GetLocalUsersListUseCase
 ) : ViewModel() {
 
-    private val _usersListLiveData = MutableLiveData<List<GithubUserEntity>>()
-    val usersListLiveData: LiveData<List<GithubUserEntity>> = _usersListLiveData
+    private val _usersListLiveData = MutableLiveData<List<GithubUser>>()
+    val usersListLiveData: LiveData<List<GithubUser>> = _usersListLiveData
 
-    private val _userLiveData = MutableLiveData<GithubUserEntity>()
-    val userLiveData: LiveData<GithubUserEntity> = _userLiveData
+    private val _userLiveData = MutableLiveData<GithubUser>()
+    val userLiveData: LiveData<GithubUser> = _userLiveData
 
     private val _errorLiveData = MutableLiveData<String?>()
     val errorLiveData: LiveData<String?> = _errorLiveData
@@ -29,41 +27,43 @@ class LoginViewModel(
     private val _loadingLiveData = MutableLiveData<Boolean>()
     val loadingLiveData: LiveData<Boolean> = _loadingLiveData
 
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-
     fun addNewUser(login: String = "") {
         _loadingLiveData.postValue(true)
 
-        compositeDisposable.add(
-            userRepo
-                .getUserRequest(login)
-                .subscribeOn(Schedulers.single())
-                .subscribeBy(
-                    onSuccess = {
-                        _loadingLiveData.postValue(false)
-                        _userLiveData.postValue(it)
-                        localRepo.addUser(it)
-                    },
-                    onError = {
-                        _loadingLiveData.postValue(false)
-                        _errorLiveData.postValue(it.localizedMessage)
-                    }
-                )
-        )
+        requestUserFromServerUseCase.requestUser(login, object : RequestCallback<GithubUser> {
+            override fun onSuccess(value: GithubUser) {
+                _loadingLiveData.postValue(false)
+                _userLiveData.postValue(value)
+                addNewLocalUserUseCase.addNewLocalUser(value)
+            }
+
+            override fun onError(t: Throwable) {
+                _loadingLiveData.postValue(false)
+                _errorLiveData.postValue(t.localizedMessage)
+            }
+
+        })
     }
 
     override fun onCleared() {
-        compositeDisposable.clear()
+        requestUserFromServerUseCase.clearDisposable()
         super.onCleared()
     }
 
     fun getUsersList() {
-        localRepo.getUsersList()
-            .subscribeOn(Schedulers.single())
-            .subscribeBy(
-                onSuccess = {
-                    _usersListLiveData.postValue(it)
-                }
-            )
+        _loadingLiveData.postValue(true)
+
+        getLocalUsersListUseCase.getLocalUsersList(object : RequestCallback<List<GithubUser>> {
+            override fun onSuccess(value: List<GithubUser>) {
+                _loadingLiveData.postValue(false)
+                _usersListLiveData.postValue(value)
+            }
+
+            override fun onError(t: Throwable) {
+                _loadingLiveData.postValue(false)
+                _errorLiveData.postValue(t.localizedMessage)
+            }
+
+        })
     }
 }

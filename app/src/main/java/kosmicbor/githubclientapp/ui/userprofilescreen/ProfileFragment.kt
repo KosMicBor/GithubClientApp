@@ -12,9 +12,11 @@ import coil.transform.CircleCropTransformation
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.app
+import kosmicbor.githubclientapp.data.usacases.RequestUserFromServerUseCaseImpl
+import kosmicbor.githubclientapp.data.usacases.RequestUserReposFromServerUseCaseImpl
 import kosmicbor.githubclientapp.databinding.FragmentProfileBinding
-import kosmicbor.githubclientapp.domain.GithubUserEntity
-import kosmicbor.githubclientapp.domain.GithubUserRepoEntity
+import kosmicbor.githubclientapp.domain.GithubUser
+import kosmicbor.githubclientapp.domain.GithubUserRepo
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -32,7 +34,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private val binding: FragmentProfileBinding by viewBinding(FragmentProfileBinding::bind)
     private val viewModel: ProfileViewModel by viewModels {
-        ProfileViewModelFactory(requireActivity().app.githubRepo)
+
+        val repo = requireActivity().app.githubRepo
+
+        ProfileViewModelFactory(
+            RequestUserFromServerUseCaseImpl(repo),
+            RequestUserReposFromServerUseCaseImpl(repo)
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,16 +72,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
 
-        viewModel.userLiveData.observe(viewLifecycleOwner) {
+        viewModel.userLiveDataDTO.observe(viewLifecycleOwner) {
             initProfileDraw(it)
         }
     }
 
-    private fun initProfileDraw(userEntity: GithubUserEntity?) {
-        userEntity?.let {
+    private fun initProfileDraw(userEntityDTO: GithubUser?) {
+        userEntityDTO?.let {
             binding.apply {
-                fragmentProfileUserName.text = userEntity.login
-                fragmentProfileUserAvatar.load(userEntity.avatarUrl) {
+                fragmentProfileUserName.text = userEntityDTO.login
+                fragmentProfileUserAvatar.load(userEntityDTO.avatarUrl) {
                     transformations(CircleCropTransformation())
                 }
             }
@@ -82,7 +90,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private fun initRecyclerView(reposList: List<GithubUserRepoEntity>) {
+    private fun initRecyclerView(reposList: List<GithubUserRepo>) {
 
         reposList.let {
             binding.apply {
