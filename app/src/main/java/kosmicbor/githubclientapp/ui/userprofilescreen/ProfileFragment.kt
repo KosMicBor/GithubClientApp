@@ -32,6 +32,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
+    private var userLogin: String? = ""
     private val binding: FragmentProfileBinding by viewBinding(FragmentProfileBinding::bind)
     private val viewModel: ProfileViewModel by viewModels {
 
@@ -46,7 +47,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userLogin = arguments?.getString(USER_LOGIN)
+        this.retainInstance = true
+
+        if (savedInstanceState == null) {
+            userLogin = arguments?.getString(USER_LOGIN)
+            userLogin?.let { viewModel.saveLogin(it) }
+        } else {
+            userLogin = viewModel.savedLogin
+        }
 
         userLogin?.let { viewModel.getCurrentUser(it) }
 

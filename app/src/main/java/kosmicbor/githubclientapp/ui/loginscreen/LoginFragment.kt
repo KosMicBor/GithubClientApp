@@ -53,6 +53,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (savedInstanceState == null) {
             viewModel.getUsersList()
         }
+
+        this.retainInstance = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

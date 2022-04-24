@@ -14,6 +14,10 @@ class ProfileViewModel(
     private val requestUserReposFromServerUseCase: RequestUserReposFromServerUseCase,
 ) : ViewModel() {
 
+    private var _savedLogin = ""
+    val savedLogin: String
+        get() = _savedLogin
+
     private val _reposLiveData = MutableLiveData<List<GithubUserRepo>>()
     val reposLiveData: LiveData<List<GithubUserRepo>> = _reposLiveData
 
@@ -59,10 +63,13 @@ class ProfileViewModel(
         })
     }
 
+    fun saveLogin(userLogin: String) {
+        _savedLogin = userLogin
+    }
+
     override fun onCleared() {
         requestUserFromServerUseCase.clearDisposable()
         requestUserReposFromServerUseCase.clearDisposable()
         super.onCleared()
     }
-
 }
