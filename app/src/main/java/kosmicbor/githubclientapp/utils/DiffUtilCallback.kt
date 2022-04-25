@@ -1,7 +1,6 @@
 package kosmicbor.githubclientapp.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import kosmicbor.githubclientapp.data.retrofit.GithubUserEntityDTO
 import kosmicbor.githubclientapp.domain.GithubUser
 
 class DiffUtilCallback(
@@ -18,10 +17,8 @@ class DiffUtilCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].id == newList[newItemPosition].id &&
-                oldList[oldItemPosition].avatarUrl == newList[newItemPosition].avatarUrl &&
-                oldList[oldItemPosition].name == newList[newItemPosition].name &&
-                oldList[oldItemPosition].login == newList[newItemPosition].login &&
-                oldList[oldItemPosition].email == newList[newItemPosition].email
+        return oldList[oldItemPosition].avatarUrl == newList[newItemPosition].avatarUrl &&
+                oldList[oldItemPosition].login == newList[newItemPosition].login
+
     }
 }

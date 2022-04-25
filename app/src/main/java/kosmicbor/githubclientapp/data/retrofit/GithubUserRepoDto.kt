@@ -2,7 +2,7 @@ package kosmicbor.githubclientapp.data.retrofit
 
 import com.google.gson.annotations.SerializedName
 
-data class GithubUserRepoEntity(
+data class GithubUserRepoDto(
     @SerializedName("id")
     val id: Int,
     @SerializedName("node_id")

@@ -53,8 +53,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (savedInstanceState == null) {
             viewModel.getUsersList()
         }
-
-        this.retainInstance = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,8 +66,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun initAddButton() {
         binding.apply {
-            fragmentLoginAddButton.setOnClickListener {
-                viewModel.addNewUser(fragmentLoginTextInputEdittext.text.toString())
+            loginAddButton.setOnClickListener {
+                viewModel.addNewUser(loginTextInputEdittext.text.toString())
             }
         }
     }
@@ -89,19 +87,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         viewModel.loadingLiveData.observe(viewLifecycleOwner) {
             binding.apply {
-                fragmentLoginAddButton.isVisible = !it
-                fragmentLoginGithubLogo.isVisible = !it
-                fragmentLoginOr.isVisible = !it
-                fragmentLoginProgressbar.isVisible = it
-                fragmentLoginRecyclerview.isVisible = !it
-                fragmentLoginTextInputLayout.isVisible = !it
-                fragmentLoginTitle.isVisible = !it
+                loginAddButton.isVisible = !it
+                loginGithubLogoImageView.isVisible = !it
+                loginOrTextView.isVisible = !it
+                loginProgressbar.isVisible = it
+                loginRecyclerview.isVisible = !it
+                loginTextInputLayout.isVisible = !it
+                loginTitleTextView.isVisible = !it
             }
         }
     }
 
     private fun initRecyclerView() {
-        binding.fragmentLoginRecyclerview.apply {
+        binding.loginRecyclerview.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = loginAdapter
         }

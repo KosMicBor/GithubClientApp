@@ -72,11 +72,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         viewModel.loadingLiveData.observe(viewLifecycleOwner) {
             binding.apply {
-                fragmentProfileRecyclerview.isVisible = !it
-                fragmentProfileUserAvatar.isVisible = !it
-                fragmentProfileUserName.isVisible = !it
-                fragmentProfileReposTitle.isVisible = !it
-                fragmentProfileProgressbar.isVisible = it
+                profileRecyclerview.isVisible = !it
+                profileUserAvatarImageView.isVisible = !it
+                profileUserNameTextView.isVisible = !it
+                profileReposTitleTextView.isVisible = !it
+                profileProgressbar.isVisible = it
             }
         }
 
@@ -88,8 +88,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initProfileDraw(userEntityDTO: GithubUser?) {
         userEntityDTO?.let {
             binding.apply {
-                fragmentProfileUserName.text = userEntityDTO.login
-                fragmentProfileUserAvatar.load(userEntityDTO.avatarUrl) {
+                profileUserNameTextView.text = userEntityDTO.login
+                profileUserAvatarImageView.load(userEntityDTO.avatarUrl) {
                     transformations(CircleCropTransformation())
                 }
             }
@@ -103,7 +103,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         reposList.let {
             binding.apply {
 
-                fragmentProfileRecyclerview.apply {
+                profileRecyclerview.apply {
                     layoutManager = LinearLayoutManager(context)
                     adapter = ProfileRecycleViewAdapter(it)
                 }

@@ -2,14 +2,12 @@ package kosmicbor.githubclientapp.ui.loginscreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import kosmicbor.githubclientapp.databinding.FragmentLoginRecyclerviewItemBinding
-import kosmicbor.githubclientapp.data.retrofit.GithubUserEntityDTO
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.utils.DiffUtilCallback
 
@@ -58,8 +56,8 @@ class LoginRecyclerviewAdapter(private val onItemClickCallback: (String) -> Unit
 
     inner class LoginViewHolder(binding: FragmentLoginRecyclerviewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val userAvatar: ShapeableImageView = binding.fragmentLoginUserAvatar
-        val userName: MaterialTextView = binding.fragmentLoginUserName
+        val userAvatar: ShapeableImageView = binding.loginUserAvatarImageView
+        val userName: MaterialTextView = binding.loginUserNameTextView
         val item = binding.root
     }
 }

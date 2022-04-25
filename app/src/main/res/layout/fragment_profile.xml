@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_profile_container"
+    android:id="@+id/profile_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/fragment_profile_progressbar"
+        android:id="@+id/profile_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/fragment_profile_user_avatar"
+        android:id="@+id/profile_user_avatar_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fragment_profile_user_avatar_margin"
@@ -26,35 +26,35 @@
         tools:src="@drawable/ic_launcher_background" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/fragment_profile_user_name"
+        android:id="@+id/profile_user_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/fragment_profile_user_name_textsize"
-        app:layout_constraintBottom_toBottomOf="@id/fragment_profile_user_avatar"
+        app:layout_constraintBottom_toBottomOf="@id/profile_user_avatar_image_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/fragment_profile_user_avatar"
-        app:layout_constraintTop_toTopOf="@id/fragment_profile_user_avatar"
+        app:layout_constraintStart_toEndOf="@id/profile_user_avatar_image_view"
+        app:layout_constraintTop_toTopOf="@id/profile_user_avatar_image_view"
         tools:text="KosMicBor" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/fragment_profile_repos_title"
+        android:id="@+id/profile_repos_title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fragment_profile_repos_title_text"
         android:textSize="@dimen/fragment_profile_repos_title_textsize"
         android:layout_marginTop="@dimen/fragment_profile_repos_title_margintop"
-        app:layout_constraintBottom_toTopOf="@id/fragment_profile_recyclerview"
-        app:layout_constraintStart_toStartOf="@id/fragment_profile_user_avatar"
-        app:layout_constraintTop_toBottomOf="@id/fragment_profile_user_avatar" />
+        app:layout_constraintBottom_toTopOf="@id/profile_recyclerview"
+        app:layout_constraintStart_toStartOf="@id/profile_user_avatar_image_view"
+        app:layout_constraintTop_toBottomOf="@id/profile_user_avatar_image_view" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_profile_recyclerview"
+        android:id="@+id/profile_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_0dp"
         android:padding="@dimen/fragment_profile_recyclerview_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_profile_repos_title" />
+        app:layout_constraintTop_toBottomOf="@id/profile_repos_title_text_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

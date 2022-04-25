@@ -6,17 +6,17 @@ import kosmicbor.githubclientapp.data.room.LocalUserDao
 import kosmicbor.githubclientapp.domain.GitHubRepository
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
-import kosmicbor.githubclientapp.utils.convertGithubUserToLocalUserEntity
-import kosmicbor.githubclientapp.utils.convertLocalUserEntityToGithubUser
+import kosmicbor.githubclientapp.utils.convertGithubUserDtoToLocalUserDto
+import kosmicbor.githubclientapp.utils.convertLocalUserDtoToGithubUser
 import kosmicbor.githubclientapp.utils.convertLocalUsersListToUsersList
-import kosmicbor.githubclientapp.utils.convertUserDtoToGithubUser
+import kosmicbor.githubclientapp.utils.convertGithubUserDtoToGithubUser
 
 class GithubRepositoryImpl(private val api: GithubApi, private val localDataSource: LocalUserDao) :
     GitHubRepository {
 
     override fun getUserRequest(login: String): Single<GithubUser> {
         return api.getUser(login).map {
-            convertUserDtoToGithubUser(it)
+            convertGithubUserDtoToGithubUser(it)
         }
     }
 
@@ -24,12 +24,7 @@ class GithubRepositoryImpl(private val api: GithubApi, private val localDataSour
         return api.listRepos(userLogin).map {
             it.map { githubUserRepoEntity ->
                 GithubUserRepo(
-                    id = githubUserRepoEntity.id,
-                    nodeId = githubUserRepoEntity.nodeId,
-                    name = githubUserRepoEntity.name,
-                    description = githubUserRepoEntity.description,
-                    isPrivate = githubUserRepoEntity.isPrivate,
-                    url = githubUserRepoEntity.url
+                    name = githubUserRepoEntity.name
                 )
             }
         }
@@ -46,7 +41,7 @@ class GithubRepositoryImpl(private val api: GithubApi, private val localDataSour
         return Single.create { emitter ->
 
             emitter.onSuccess(
-                convertLocalUserEntityToGithubUser(
+                convertLocalUserDtoToGithubUser(
                     localDataSource.getLocalUser(
                         login
                     )
@@ -56,14 +51,14 @@ class GithubRepositoryImpl(private val api: GithubApi, private val localDataSour
     }
 
     override fun addUser(user: GithubUser) {
-        localDataSource.insertNewLocalUser(convertGithubUserToLocalUserEntity(user))
+        localDataSource.insertNewLocalUser(convertGithubUserDtoToLocalUserDto(user))
     }
 
     override fun updateUser(user: GithubUser) {
-        localDataSource.updateCurrentLocalUser(convertGithubUserToLocalUserEntity(user))
+        localDataSource.updateCurrentLocalUser(convertGithubUserDtoToLocalUserDto(user))
     }
 
     override fun deleteUser(user: GithubUser) {
-        localDataSource.deleteCurrentLocalUser(convertGithubUserToLocalUserEntity(user))
+        localDataSource.deleteCurrentLocalUser(convertGithubUserDtoToLocalUserDto(user))
     }
 }
