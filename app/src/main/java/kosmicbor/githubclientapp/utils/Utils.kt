@@ -13,7 +13,7 @@ fun convertLocalUsersListToUsersList(dtoList: List<LocalUserDto>): List<GithubUs
     }
 }
 
-fun convertGithubUserDtoToLocalUserDto(githubUser: GithubUser): LocalUserDto {
+fun convertGithubUserToLocalUserDto(githubUser: GithubUser): LocalUserDto {
     return LocalUserDto(
         login = githubUser.login,
         avatarUrl = githubUser.avatarUrl

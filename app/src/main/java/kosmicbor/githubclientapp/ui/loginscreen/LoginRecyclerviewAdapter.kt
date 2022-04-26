@@ -2,20 +2,26 @@ package kosmicbor.githubclientapp.ui.loginscreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import kosmicbor.githubclientapp.databinding.FragmentLoginRecyclerviewItemBinding
 import kosmicbor.githubclientapp.domain.GithubUser
-import kosmicbor.githubclientapp.utils.DiffUtilCallback
+import kosmicbor.githubclientapp.utils.LoginItemTouchHelperAdapter
+import kosmicbor.githubclientapp.utils.LoginItemTouchHelperViewHolder
 
 
-class LoginRecyclerviewAdapter(private val onItemClickCallback: (String) -> Unit) :
-    RecyclerView.Adapter<LoginRecyclerviewAdapter.LoginViewHolder>() {
+class LoginRecyclerviewAdapter(
+    private val usersList: MutableList<GithubUser>,
+    private val onItemClickCallback: (String) -> Unit,
+    private val onItemRemoveCallback: (GithubUser) -> Unit
+) :
+    RecyclerView.Adapter<LoginRecyclerviewAdapter.LoginViewHolder>(), LoginItemTouchHelperAdapter {
 
-    private val usersList = mutableListOf<GithubUser>()
+    companion object {
+        private const val ZERO_VAL = 0
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LoginViewHolder {
 
@@ -32,32 +38,40 @@ class LoginRecyclerviewAdapter(private val onItemClickCallback: (String) -> Unit
             userAvatar.load(usersList[position].avatarUrl)
             userName.text = usersList[position].login
             item.setOnClickListener {
-                onItemClickCallback(usersList[position].login)
+                onItemClickCallback(usersList[holder.bindingAdapterPosition].login)
             }
         }
     }
 
     override fun getItemCount(): Int = usersList.size
 
-    fun addUser(it: GithubUser?) {
-        if (it != null) {
-            usersList.add(it)
+    fun addUser(newUser: GithubUser?) {
+
+        if (newUser != null && !usersList.contains(newUser)) {
+            usersList.add(newUser)
+            notifyItemInserted(this.itemCount)
         }
-        notifyItemInserted(this.itemCount)
     }
 
-    fun fillUsersList(newUsersList: List<GithubUser>) {
-        val diffUtil = DiffUtilCallback(usersList, newUsersList)
-        val result = DiffUtil.calculateDiff(diffUtil)
-        usersList.clear()
-        usersList.addAll(newUsersList)
-        result.dispatchUpdatesTo(this)
+    override fun itemDismiss(position: Int) {
+        removeItem(position)
+    }
+
+    private fun removeItem(position: Int) {
+        val githubUser = usersList[position]
+        usersList.removeAt(position)
+        onItemRemoveCallback(githubUser)
+        notifyItemRemoved(position)
     }
 
     inner class LoginViewHolder(binding: FragmentLoginRecyclerviewItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), LoginItemTouchHelperViewHolder {
         val userAvatar: ShapeableImageView = binding.loginUserAvatarImageView
         val userName: MaterialTextView = binding.loginUserNameTextView
         val item = binding.root
+
+        override fun onItemClear() {
+            itemView.setBackgroundColor(ZERO_VAL)
+        }
     }
 }

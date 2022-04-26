@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.usecases.AddNewLocalUserUseCase
+import kosmicbor.githubclientapp.domain.usecases.DeleteUserFromLocalStorageUseCase
 import kosmicbor.githubclientapp.domain.usecases.GetLocalUsersListUseCase
 import kosmicbor.githubclientapp.domain.usecases.RequestUserFromServerUseCase
 import kosmicbor.githubclientapp.utils.RequestCallback
@@ -12,7 +13,8 @@ import kosmicbor.githubclientapp.utils.RequestCallback
 class LoginViewModel(
     private val requestUserFromServerUseCase: RequestUserFromServerUseCase,
     private val addNewLocalUserUseCase: AddNewLocalUserUseCase,
-    private val getLocalUsersListUseCase: GetLocalUsersListUseCase
+    private val getLocalUsersListUseCase: GetLocalUsersListUseCase,
+    private val deleteUserFromLocalStorageUseCase: DeleteUserFromLocalStorageUseCase
 ) : ViewModel() {
 
     private val _usersListLiveData = MutableLiveData<List<GithubUser>>()
@@ -45,11 +47,6 @@ class LoginViewModel(
         })
     }
 
-    override fun onCleared() {
-        requestUserFromServerUseCase.clearDisposable()
-        super.onCleared()
-    }
-
     fun getUsersList() {
         _loadingLiveData.postValue(true)
 
@@ -65,5 +62,14 @@ class LoginViewModel(
             }
 
         })
+    }
+
+    fun deleteUserFromLocalStorage(githubUser: GithubUser) {
+        deleteUserFromLocalStorageUseCase.deleteLocalUser(githubUser)
+    }
+
+    override fun onCleared() {
+        requestUserFromServerUseCase.clearDisposable()
+        super.onCleared()
     }
 }

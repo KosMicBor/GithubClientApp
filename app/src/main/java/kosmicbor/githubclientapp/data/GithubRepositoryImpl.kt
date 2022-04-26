@@ -1,12 +1,13 @@
 package kosmicbor.githubclientapp.data
 
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kosmicbor.githubclientapp.data.retrofit.GithubApi
 import kosmicbor.githubclientapp.data.room.LocalUserDao
 import kosmicbor.githubclientapp.domain.GitHubRepository
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
-import kosmicbor.githubclientapp.utils.convertGithubUserDtoToLocalUserDto
+import kosmicbor.githubclientapp.utils.convertGithubUserToLocalUserDto
 import kosmicbor.githubclientapp.utils.convertLocalUserDtoToGithubUser
 import kosmicbor.githubclientapp.utils.convertLocalUsersListToUsersList
 import kosmicbor.githubclientapp.utils.convertGithubUserDtoToGithubUser
@@ -51,14 +52,16 @@ class GithubRepositoryImpl(private val api: GithubApi, private val localDataSour
     }
 
     override fun addUser(user: GithubUser) {
-        localDataSource.insertNewLocalUser(convertGithubUserDtoToLocalUserDto(user))
+        localDataSource.insertNewLocalUser(convertGithubUserToLocalUserDto(user))
     }
 
     override fun updateUser(user: GithubUser) {
-        localDataSource.updateCurrentLocalUser(convertGithubUserDtoToLocalUserDto(user))
+        localDataSource.updateCurrentLocalUser(convertGithubUserToLocalUserDto(user))
     }
 
     override fun deleteUser(user: GithubUser) {
-        localDataSource.deleteCurrentLocalUser(convertGithubUserDtoToLocalUserDto(user))
+        Single.just {
+            localDataSource.deleteCurrentLocalUser(convertGithubUserToLocalUserDto(user))
+        }
     }
 }

@@ -2,19 +2,24 @@ package kosmicbor.githubclientapp.ui.loginscreen
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.app
 import kosmicbor.githubclientapp.data.usacases.AddNewLocalUserUseCaseImpl
+import kosmicbor.githubclientapp.data.usacases.DeleteUserFromLocalStorageUseCaseImpl
 import kosmicbor.githubclientapp.data.usacases.GetLocalUsersListUseCaseImpl
 import kosmicbor.githubclientapp.data.usacases.RequestUserFromServerUseCaseImpl
 import kosmicbor.githubclientapp.databinding.FragmentLoginBinding
+import kosmicbor.githubclientapp.domain.GithubUser
+import kosmicbor.githubclientapp.utils.LoginItemTouchHelper
 import java.lang.IllegalStateException
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -26,7 +31,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         LoginViewModelFactory(
             RequestUserFromServerUseCaseImpl(repo),
             AddNewLocalUserUseCaseImpl(repo),
-            GetLocalUsersListUseCaseImpl(repo)
+            GetLocalUsersListUseCaseImpl(repo),
+            DeleteUserFromLocalStorageUseCaseImpl(repo)
         )
     }
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
@@ -35,17 +41,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         activity as LoginController
     }
 
-    private val loginAdapter: LoginRecyclerviewAdapter = LoginRecyclerviewAdapter {
-        loginController.openProfileScreen(it)
-    }
+    private lateinit var loginAdapter: LoginRecyclerviewAdapter
 
-    @Throws(IllegalStateException::class)
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (activity !is LoginController) {
-            throw IllegalStateException(getString(R.string.wrong_activity_error_message))
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,13 +52,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
+    @Throws(IllegalStateException::class)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (activity !is LoginController) {
+            throw IllegalStateException(getString(R.string.wrong_activity_error_message))
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
-        initRecyclerView()
         initAddButton()
-
     }
 
     private fun initAddButton() {
@@ -73,8 +77,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun initViewModel() {
-        viewModel.usersListLiveData.observe(viewLifecycleOwner) {
-            loginAdapter.fillUsersList(it)
+        viewModel.usersListLiveData.observe(viewLifecycleOwner) { usersList ->
+            loginAdapter = LoginRecyclerviewAdapter(
+                usersList as MutableList<GithubUser>,
+                { login ->
+                    loginController.openProfileScreen(login)
+                },
+                { user ->
+                    viewModel.deleteUserFromLocalStorage(user)
+                }
+            )
+
+            initRecyclerView()
         }
 
         viewModel.userLiveData.observe(viewLifecycleOwner) {
@@ -102,6 +116,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.loginRecyclerview.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = loginAdapter
+            ItemTouchHelper(LoginItemTouchHelper(loginAdapter))
+                .attachToRecyclerView(binding.loginRecyclerview)
         }
     }
 
