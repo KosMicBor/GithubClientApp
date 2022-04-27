@@ -1,12 +1,12 @@
 package kosmicbor.githubclientapp.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import kosmicbor.githubclientapp.domain.GithubUserEntity
-import kosmicbor.githubclientapp.domain.User
+import kosmicbor.githubclientapp.data.retrofit.GithubUserEntityDTO
+import kosmicbor.githubclientapp.domain.GithubUser
 
 class DiffUtilCallback(
-    private val oldList: List<GithubUserEntity>,
-    private val newList: List<GithubUserEntity>
+    private val oldList: List<GithubUser>,
+    private val newList: List<GithubUser>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size

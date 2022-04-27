@@ -2,30 +2,31 @@ package kosmicbor.githubclientapp.ui.loginscreen
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
-import kosmicbor.githubclientapp.App
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.app
-import kosmicbor.githubclientapp.data.room.LocalUserRepoImpl
+import kosmicbor.githubclientapp.data.usacases.AddNewLocalUserUseCaseImpl
+import kosmicbor.githubclientapp.data.usacases.GetLocalUsersListUseCaseImpl
+import kosmicbor.githubclientapp.data.usacases.RequestUserFromServerUseCaseImpl
 import kosmicbor.githubclientapp.databinding.FragmentLoginBinding
 import java.lang.IllegalStateException
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val viewModel: LoginViewModel by viewModels {
+
+        val repo = requireActivity().app.githubRepo
+
         LoginViewModelFactory(
-            requireActivity().app.githubRepo,
-            requireActivity().app.localRepo
+            RequestUserFromServerUseCaseImpl(repo),
+            AddNewLocalUserUseCaseImpl(repo),
+            GetLocalUsersListUseCaseImpl(repo)
         )
     }
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
@@ -52,6 +53,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (savedInstanceState == null) {
             viewModel.getUsersList()
         }
+
+        this.retainInstance = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

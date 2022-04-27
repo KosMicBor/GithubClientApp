@@ -2,14 +2,20 @@ package kosmicbor.githubclientapp.ui.loginscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import kosmicbor.githubclientapp.domain.GitHubRepository
-import kosmicbor.githubclientapp.domain.LocalUserRepository
+import kosmicbor.githubclientapp.domain.usecases.AddNewLocalUserUseCase
+import kosmicbor.githubclientapp.domain.usecases.GetLocalUsersListUseCase
+import kosmicbor.githubclientapp.domain.usecases.RequestUserFromServerUseCase
 
 class LoginViewModelFactory(
-    private val repository: GitHubRepository,
-    private val localRepository: LocalUserRepository
+    private val requestUserFromServerUseCase: RequestUserFromServerUseCase,
+    private val addNewLocalUserUseCase: AddNewLocalUserUseCase,
+    private val getLocalUsersListUseCase: GetLocalUsersListUseCase
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return LoginViewModel(repository, localRepository) as T
+        return LoginViewModel(
+            requestUserFromServerUseCase,
+            addNewLocalUserUseCase,
+            getLocalUsersListUseCase
+        ) as T
     }
 }

@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kosmicbor.githubclientapp.databinding.FragmentProfileRecyclerviewItemBinding
-import kosmicbor.githubclientapp.domain.GithubUserRepoEntity
-import kosmicbor.githubclientapp.domain.UserRepo
+import kosmicbor.githubclientapp.domain.GithubUserRepo
 
-class ProfileRecycleViewAdapter(private val reposList: List<GithubUserRepoEntity>) :
+class ProfileRecycleViewAdapter(private val reposList: List<GithubUserRepo>) :
     RecyclerView.Adapter<ProfileRecycleViewAdapter.ProfileViewHolder>() {
 
     inner class ProfileViewHolder(binding: FragmentProfileRecyclerviewItemBinding) :

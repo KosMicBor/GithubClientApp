@@ -3,30 +3,40 @@ package kosmicbor.githubclientapp
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import kosmicbor.githubclientapp.data.retrofit.RetrofitGithubImpl
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
+import kosmicbor.githubclientapp.data.GithubRepositoryImpl
+import kosmicbor.githubclientapp.data.retrofit.GithubApi
 import kosmicbor.githubclientapp.data.room.LocalUserDataBase
-import kosmicbor.githubclientapp.data.room.LocalUserRepoImpl
 import kosmicbor.githubclientapp.domain.GitHubRepository
-import kosmicbor.githubclientapp.domain.LocalUserRepository
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class App : Application() {
-    val githubRepo: GitHubRepository by lazy {
-        RetrofitGithubImpl()
-    }
-
-    val localRepo: LocalUserRepository by lazy {
-        val db = Room.databaseBuilder(
-            applicationContext,
-            LocalUserDataBase::class.java, DATABASE_NAME
-        ).build()
-
-        LocalUserRepoImpl(db.localUserDao())
-    }
 
     companion object {
         private const val DATABASE_NAME = "LocalUser.db"
     }
+
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.github.com/")
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val api = retrofit.create(GithubApi::class.java)
+
+    private val db by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            LocalUserDataBase::class.java, DATABASE_NAME
+        ).build()
+    }
+
+    val githubRepo: GitHubRepository by lazy {
+        GithubRepositoryImpl(api, db.localUserDao())
+    }
 }
+
 
 val Context.app: App
     get() {
