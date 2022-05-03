@@ -28,16 +28,24 @@ val appModule = module {
     single<GithubApi> { get<Retrofit>().create(GithubApi::class.java) }
 
     //HttpLoggingInterceptor
-    single {
-        HttpLoggingInterceptor {
+    single<HttpLoggingInterceptor>(named("interceptor")) {
+
+        Timber.plant(Timber.DebugTree())
+
+        val interceptor = HttpLoggingInterceptor {
             Timber.i(it)
-        }.setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
     //OkHttpClient
     single {
+
+        val interceptor = this.get<HttpLoggingInterceptor>(named("interceptor"))
+
         OkHttpClient().newBuilder()
-            .addInterceptor { get() }
+            .addInterceptor (interceptor)
             .build()
     }
 
