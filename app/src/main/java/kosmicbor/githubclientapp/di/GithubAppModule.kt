@@ -10,6 +10,8 @@ import kosmicbor.githubclientapp.domain.GitHubRepository
 import kosmicbor.githubclientapp.domain.usecases.*
 import kosmicbor.githubclientapp.ui.loginscreen.LoginViewModel
 import kosmicbor.githubclientapp.ui.userprofilescreen.ProfileViewModel
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -18,11 +20,26 @@ import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import timber.log.Timber
 
 val appModule = module {
 
     single<GitHubRepository> { GithubRepositoryImpl(get(), get()) }
     single<GithubApi> { get<Retrofit>().create(GithubApi::class.java) }
+
+    //HttpLoggingInterceptor
+    single {
+        HttpLoggingInterceptor {
+            Timber.i(it)
+        }.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    //OkHttpClient
+    single {
+        OkHttpClient().newBuilder()
+            .addInterceptor { get() }
+            .build()
+    }
 
     //Retrofit
     factory<Converter.Factory> { GsonConverterFactory.create() }
@@ -32,6 +49,7 @@ val appModule = module {
         Retrofit.Builder()
             .baseUrl(get<String>(named("github_api_url")))
             .addCallAdapterFactory(get())
+            .client(get())
             .addConverterFactory(get())
             .build()
     }
