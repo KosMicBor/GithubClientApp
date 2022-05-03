@@ -1,23 +1,33 @@
 package kosmicbor.githubclientapp
 
 import android.app.Application
-import kosmicbor.githubclientapp.di.appModule
-import kosmicbor.githubclientapp.di.viewModelModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.GlobalContext.startKoin
+import android.content.Context
+import kosmicbor.githubclientapp.di.*
+import kosmicbor.githubclientapp.di.modules.DataBaseModule
+import kosmicbor.githubclientapp.di.modules.GithubApiModule
+import kosmicbor.githubclientapp.di.modules.GithubRepositoryModule
+import kosmicbor.githubclientapp.di.modules.HttpClientModule
 
 class App : Application() {
+
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidLogger()
-            androidContext(this@App)
-            modules(appModule, viewModelModule)
-        }
+        appComponent = DaggerAppComponent
+            .builder()
+            .dataBaseModule(DataBaseModule(this))
+            .githubApiModule(GithubApiModule())
+            .githubRepositoryModule(GithubRepositoryModule())
+            .httpClientModule(HttpClientModule())
+            .build()
     }
 
 
 }
+
+val Context.app: App
+    get() {
+        return applicationContext as App
+    }

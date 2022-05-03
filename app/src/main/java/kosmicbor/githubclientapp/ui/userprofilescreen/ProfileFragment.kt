@@ -11,14 +11,12 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.githubclientapp.R
-import kosmicbor.githubclientapp.data.usacases.RequestUserFromServerUseCaseImpl
-import kosmicbor.githubclientapp.data.usacases.RequestUserReposFromServerUseCaseImpl
+import kosmicbor.githubclientapp.app
 import kosmicbor.githubclientapp.databinding.FragmentProfileBinding
-import kosmicbor.githubclientapp.domain.GitHubRepository
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kosmicbor.githubclientapp.domain.usecases.ProfileScreenUseCase
+import javax.inject.Inject
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -34,9 +32,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
+    @Inject
+    lateinit var useCase: ProfileScreenUseCase
+
     private var userLogin: String? = ""
     private val binding: FragmentProfileBinding by viewBinding(FragmentProfileBinding::bind)
-    private val viewModel: ProfileViewModel by viewModel()
+
+    private val viewModel: ProfileViewModel by viewModels {
+        ProfileViewModelFactory(useCase)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().app.appComponent.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

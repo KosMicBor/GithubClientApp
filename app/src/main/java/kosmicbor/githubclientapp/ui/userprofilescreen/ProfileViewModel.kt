@@ -5,13 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
-import kosmicbor.githubclientapp.domain.usecases.RequestUserFromServerUseCase
-import kosmicbor.githubclientapp.domain.usecases.RequestUserReposFromServerUseCase
+import kosmicbor.githubclientapp.domain.usecases.ProfileScreenUseCase
 import kosmicbor.githubclientapp.utils.RequestCallback
 
 class ProfileViewModel(
-    private val requestUserFromServerUseCase: RequestUserFromServerUseCase,
-    private val requestUserReposFromServerUseCase: RequestUserReposFromServerUseCase,
+    private val profileScreenUseCase: ProfileScreenUseCase,
 ) : ViewModel() {
 
     private var _savedLogin = ""
@@ -32,7 +30,7 @@ class ProfileViewModel(
 
     fun getUserRepos(login: String) {
 
-        requestUserReposFromServerUseCase.requestUserReposFromServer(
+        profileScreenUseCase.requestUserReposFromServer(
             login,
             object : RequestCallback<List<GithubUserRepo>> {
                 override fun onSuccess(value: List<GithubUserRepo>) {
@@ -49,7 +47,7 @@ class ProfileViewModel(
     fun getCurrentUser(login: String) {
         _loadingLiveData.postValue(true)
 
-        requestUserFromServerUseCase.requestUser(login, object : RequestCallback<GithubUser> {
+        profileScreenUseCase.requestUser(login, object : RequestCallback<GithubUser> {
             override fun onSuccess(value: GithubUser) {
                 _loadingLiveData.postValue(false)
                 _userLiveData.postValue(value)
@@ -68,8 +66,7 @@ class ProfileViewModel(
     }
 
     override fun onCleared() {
-        requestUserFromServerUseCase.clearDisposable()
-        requestUserReposFromServerUseCase.clearDisposable()
+        profileScreenUseCase.clearDisposable()
         super.onCleared()
     }
 }

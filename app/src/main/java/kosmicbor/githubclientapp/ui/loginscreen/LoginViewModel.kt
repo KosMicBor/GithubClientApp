@@ -4,17 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kosmicbor.githubclientapp.domain.GithubUser
-import kosmicbor.githubclientapp.domain.usecases.AddNewLocalUserUseCase
-import kosmicbor.githubclientapp.domain.usecases.DeleteUserFromLocalStorageUseCase
-import kosmicbor.githubclientapp.domain.usecases.GetLocalUsersListUseCase
-import kosmicbor.githubclientapp.domain.usecases.RequestUserFromServerUseCase
+import kosmicbor.githubclientapp.domain.usecases.LoginScreenUseCase
 import kosmicbor.githubclientapp.utils.RequestCallback
 
 class LoginViewModel(
-    private val requestUserFromServerUseCase: RequestUserFromServerUseCase,
-    private val addNewLocalUserUseCase: AddNewLocalUserUseCase,
-    private val getLocalUsersListUseCase: GetLocalUsersListUseCase,
-    private val deleteUserFromLocalStorageUseCase: DeleteUserFromLocalStorageUseCase
+    private val loginScreenUseCase: LoginScreenUseCase
 ) : ViewModel() {
 
     private val _usersListLiveData = MutableLiveData<List<GithubUser>>()
@@ -32,11 +26,11 @@ class LoginViewModel(
     fun addNewUser(login: String = "") {
         _loadingLiveData.postValue(true)
 
-        requestUserFromServerUseCase.requestUser(login, object : RequestCallback<GithubUser> {
+        loginScreenUseCase.requestUser(login, object : RequestCallback<GithubUser> {
             override fun onSuccess(value: GithubUser) {
                 _loadingLiveData.postValue(false)
                 _userLiveData.postValue(value)
-                addNewLocalUserUseCase.addNewLocalUser(value)
+                loginScreenUseCase.addNewLocalUser(value)
             }
 
             override fun onError(t: Throwable) {
@@ -50,7 +44,7 @@ class LoginViewModel(
     fun getUsersList() {
         _loadingLiveData.postValue(true)
 
-        getLocalUsersListUseCase.getLocalUsersList(object : RequestCallback<List<GithubUser>> {
+        loginScreenUseCase.getLocalUsersList(object : RequestCallback<List<GithubUser>> {
             override fun onSuccess(value: List<GithubUser>) {
                 _loadingLiveData.postValue(false)
                 _usersListLiveData.postValue(value)
@@ -65,11 +59,11 @@ class LoginViewModel(
     }
 
     fun deleteUserFromLocalStorage(githubUser: GithubUser) {
-        deleteUserFromLocalStorageUseCase.deleteLocalUser(githubUser)
+        loginScreenUseCase.deleteLocalUser(githubUser)
     }
 
     override fun onCleared() {
-        requestUserFromServerUseCase.clearDisposable()
+        loginScreenUseCase.clearDisposable()
         super.onCleared()
     }
 }

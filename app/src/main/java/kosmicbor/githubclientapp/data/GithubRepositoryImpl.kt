@@ -1,7 +1,6 @@
 package kosmicbor.githubclientapp.data
 
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kosmicbor.githubclientapp.data.retrofit.GithubApi
 import kosmicbor.githubclientapp.data.room.LocalUserDao
 import kosmicbor.githubclientapp.domain.GitHubRepository
