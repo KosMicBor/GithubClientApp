@@ -2,7 +2,8 @@ package kosmicbor.githubclientapp
 
 import android.app.Application
 import android.content.Context
-import kosmicbor.githubclientapp.di.*
+import kosmicbor.githubclientapp.di.AppComponent
+import kosmicbor.githubclientapp.di.DaggerAppComponent
 import kosmicbor.githubclientapp.di.modules.DataBaseModule
 import kosmicbor.githubclientapp.di.modules.GithubApiModule
 import kosmicbor.githubclientapp.di.modules.GithubRepositoryModule
@@ -19,7 +20,7 @@ class App : Application() {
             .builder()
             .dataBaseModule(DataBaseModule(this))
             .githubApiModule(GithubApiModule())
-            .githubRepositoryModule(GithubRepositoryModule())
+            .githubRepositoryModule(GithubRepositoryModule(this))
             .httpClientModule(HttpClientModule())
             .build()
     }

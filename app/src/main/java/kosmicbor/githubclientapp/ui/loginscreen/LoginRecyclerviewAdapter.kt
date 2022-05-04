@@ -46,7 +46,6 @@ class LoginRecyclerviewAdapter(
     override fun getItemCount(): Int = usersList.size
 
     fun addUser(newUser: GithubUser?) {
-
         if (newUser != null && !usersList.contains(newUser)) {
             usersList.add(newUser)
             notifyItemInserted(this.itemCount)

@@ -1,18 +1,22 @@
 package kosmicbor.githubclientapp.data
 
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kosmicbor.githubclientapp.data.retrofit.GithubApi
 import kosmicbor.githubclientapp.data.room.LocalUserDao
 import kosmicbor.githubclientapp.domain.GitHubRepository
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
+import kosmicbor.githubclientapp.utils.convertGithubUserDtoToGithubUser
 import kosmicbor.githubclientapp.utils.convertGithubUserToLocalUserDto
 import kosmicbor.githubclientapp.utils.convertLocalUserDtoToGithubUser
 import kosmicbor.githubclientapp.utils.convertLocalUsersListToUsersList
-import kosmicbor.githubclientapp.utils.convertGithubUserDtoToGithubUser
 
 class GithubRepositoryImpl(private val api: GithubApi, private val localDataSource: LocalUserDao) :
     GitHubRepository {
+
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     override fun getUserRequest(login: String): Single<GithubUser> {
         return api.getUser(login).map {
@@ -59,8 +63,16 @@ class GithubRepositoryImpl(private val api: GithubApi, private val localDataSour
     }
 
     override fun deleteUser(user: GithubUser) {
-        Single.just {
+
+        compositeDisposable.add (
             localDataSource.deleteCurrentLocalUser(convertGithubUserToLocalUserDto(user))
-        }
+                .subscribeOn(Schedulers.single()).subscribe()
+        )
     }
+
+    override fun clearDisposible() {
+        compositeDisposable.clear()
+    }
+
+
 }

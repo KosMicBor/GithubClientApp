@@ -6,4 +6,5 @@
     <string name="fragment_login_add_button_text">add user</string>
     <string name="fragment_profile_repos_title_text">List of available repositories:</string>
     <string name="wrong_activity_error_message">This activity isn\'t LoginController</string>
+    <string name="userExistMessage">This user already existing</string>
 </resources>

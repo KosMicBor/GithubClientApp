@@ -1,6 +1,7 @@
 package kosmicbor.githubclientapp.data.room
 
 import androidx.room.*
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface LocalUserDao {
@@ -17,5 +18,5 @@ interface LocalUserDao {
     fun updateCurrentLocalUser(user: LocalUserDto)
 
     @Delete
-    fun deleteCurrentLocalUser(user: LocalUserDto)
+    fun deleteCurrentLocalUser(user: LocalUserDto): Single<Int>
 }

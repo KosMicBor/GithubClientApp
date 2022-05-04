@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
 import kosmicbor.githubclientapp.domain.usecases.ProfileScreenUseCase
+import kosmicbor.githubclientapp.utils.EventChecker
 import kosmicbor.githubclientapp.utils.RequestCallback
 
 class ProfileViewModel(
@@ -25,8 +26,8 @@ class ProfileViewModel(
     private val _loadingLiveData = MutableLiveData<Boolean>()
     val loadingLiveData: LiveData<Boolean> = _loadingLiveData
 
-    private val _errorLiveData = MutableLiveData<String?>()
-    val errorLiveData: LiveData<String?> = _errorLiveData
+    private val _errorLiveData = MutableLiveData<EventChecker<String?>>()
+    val errorLiveData: LiveData<EventChecker<String?>> = _errorLiveData
 
     fun getUserRepos(login: String) {
 
@@ -38,7 +39,7 @@ class ProfileViewModel(
                 }
 
                 override fun onError(t: Throwable) {
-                    _errorLiveData.postValue(t.localizedMessage)
+                    _errorLiveData.postValue(EventChecker(t.localizedMessage))
                 }
 
             })
@@ -55,7 +56,7 @@ class ProfileViewModel(
 
             override fun onError(t: Throwable) {
                 _loadingLiveData.postValue(false)
-                _errorLiveData.postValue(t.localizedMessage)
+                _errorLiveData.postValue(EventChecker(t.localizedMessage))
             }
 
         })

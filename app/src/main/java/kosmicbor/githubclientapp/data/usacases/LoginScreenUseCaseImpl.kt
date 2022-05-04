@@ -48,6 +48,7 @@ class LoginScreenUseCaseImpl(private val repository: GitHubRepository) : LoginSc
 
     override fun clearDisposable() {
         compositeDisposable.clear()
+        repository.clearDisposible()
     }
 
     override fun deleteLocalUser(githubUser: GithubUser) {

@@ -16,6 +16,7 @@ import kosmicbor.githubclientapp.databinding.FragmentLoginBinding
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.usecases.LoginScreenUseCase
 import kosmicbor.githubclientapp.utils.LoginItemTouchHelper
+import kosmicbor.githubclientapp.utils.ResourcesHelper
 import javax.inject.Inject
 
 
@@ -24,9 +25,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     @Inject
     lateinit var useCase: LoginScreenUseCase
 
+    @Inject
+    lateinit var resourcesHelper: ResourcesHelper
+
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(
-            useCase
+            useCase,
+            resourcesHelper
         )
     }
 
@@ -55,6 +60,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (activity !is LoginController) {
             throw IllegalStateException(getString(R.string.wrong_activity_error_message))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //viewModel.getUsersList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,7 +99,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-            it?.let { errorMessage ->
+            it.getContentIfHandled()?.let { errorMessage ->
                 Snackbar.make(
                     binding.root,
                     errorMessage,
