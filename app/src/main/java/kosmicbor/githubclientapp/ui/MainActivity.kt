@@ -30,8 +30,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), LoginFragment.Lo
     private fun openLoginFragment() {
         supportFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
-            .replace(R.id.main_container, LoginFragment())
-            .addToBackStack("LoginScreen")
+            .replace(R.id.main_container_framelayout, LoginFragment())
             .commit()
     }
 
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), LoginFragment.Lo
 
         supportFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
-            .replace(R.id.main_container, ProfileFragment.newInstance(bundle))
+            .replace(R.id.main_container_framelayout, ProfileFragment.newInstance(bundle))
             .addToBackStack("ProfileScreen")
             .commit()
     }

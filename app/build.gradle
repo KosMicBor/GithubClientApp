@@ -75,4 +75,9 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.4.2'
     implementation 'androidx.room:room-rxjava3:2.4.2'
     kapt 'androidx.room:room-compiler:2.4.2'
+
+    //Koin
+    implementation 'io.insert-koin:koin-core:3.2.0-beta-1'
+    implementation 'io.insert-koin:koin-android:3.2.0-beta-1'
+    implementation 'io.insert-koin:koin-logger-slf4j:3.2.0-beta-1'
 }

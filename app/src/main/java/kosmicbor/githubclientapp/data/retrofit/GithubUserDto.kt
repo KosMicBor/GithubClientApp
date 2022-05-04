@@ -2,7 +2,7 @@ package kosmicbor.githubclientapp.data.retrofit
 
 import com.google.gson.annotations.SerializedName
 
-data class GithubUserEntityDTO(
+data class GithubUserDto(
     @SerializedName("login")
     val login: String,
     @SerializedName("id")

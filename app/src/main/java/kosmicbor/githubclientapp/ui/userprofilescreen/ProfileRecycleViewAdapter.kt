@@ -11,7 +11,7 @@ class ProfileRecycleViewAdapter(private val reposList: List<GithubUserRepo>) :
 
     inner class ProfileViewHolder(binding: FragmentProfileRecyclerviewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val repoName = binding.fragmentProfileRepoName
+        val repoName = binding.profileItemRepoNameTextView
     }
 
 

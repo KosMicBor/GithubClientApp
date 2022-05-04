@@ -11,12 +11,14 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.githubclientapp.R
-import kosmicbor.githubclientapp.app
 import kosmicbor.githubclientapp.data.usacases.RequestUserFromServerUseCaseImpl
 import kosmicbor.githubclientapp.data.usacases.RequestUserReposFromServerUseCaseImpl
 import kosmicbor.githubclientapp.databinding.FragmentProfileBinding
+import kosmicbor.githubclientapp.domain.GitHubRepository
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -34,15 +36,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var userLogin: String? = ""
     private val binding: FragmentProfileBinding by viewBinding(FragmentProfileBinding::bind)
-    private val viewModel: ProfileViewModel by viewModels {
-
-        val repo = requireActivity().app.githubRepo
-
-        ProfileViewModelFactory(
-            RequestUserFromServerUseCaseImpl(repo),
-            RequestUserReposFromServerUseCaseImpl(repo)
-        )
-    }
+    private val viewModel: ProfileViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,11 +66,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         viewModel.loadingLiveData.observe(viewLifecycleOwner) {
             binding.apply {
-                fragmentProfileRecyclerview.isVisible = !it
-                fragmentProfileUserAvatar.isVisible = !it
-                fragmentProfileUserName.isVisible = !it
-                fragmentProfileReposTitle.isVisible = !it
-                fragmentProfileProgressbar.isVisible = it
+                profileRecyclerview.isVisible = !it
+                profileUserAvatarImageView.isVisible = !it
+                profileUserNameTextView.isVisible = !it
+                profileReposTitleTextView.isVisible = !it
+                profileProgressbar.isVisible = it
             }
         }
 
@@ -88,8 +82,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initProfileDraw(userEntityDTO: GithubUser?) {
         userEntityDTO?.let {
             binding.apply {
-                fragmentProfileUserName.text = userEntityDTO.login
-                fragmentProfileUserAvatar.load(userEntityDTO.avatarUrl) {
+                profileUserNameTextView.text = userEntityDTO.login
+                profileUserAvatarImageView.load(userEntityDTO.avatarUrl) {
                     transformations(CircleCropTransformation())
                 }
             }
@@ -103,7 +97,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         reposList.let {
             binding.apply {
 
-                fragmentProfileRecyclerview.apply {
+                profileRecyclerview.apply {
                     layoutManager = LinearLayoutManager(context)
                     adapter = ProfileRecycleViewAdapter(it)
                 }

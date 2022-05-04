@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_profile_item_cardview"
+    android:id="@+id/profile_item_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/fragment_profile_item_cardview_margin"
@@ -10,7 +10,7 @@
     app:cardCornerRadius="@dimen/fragment_profile_item_cardview_corner_radius">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/fragment_profile_repo_name"
+        android:id="@+id/profile_item_repo_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
