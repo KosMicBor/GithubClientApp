@@ -8,8 +8,9 @@ import kosmicbor.githubclientapp.domain.GithubUserRepo
 import kosmicbor.githubclientapp.domain.usecases.ProfileScreenUseCase
 import kosmicbor.githubclientapp.utils.EventChecker
 import kosmicbor.githubclientapp.utils.RequestCallback
+import javax.inject.Inject
 
-class ProfileViewModel(
+class ProfileViewModel @Inject constructor(
     private val profileScreenUseCase: ProfileScreenUseCase,
 ) : ViewModel() {
 

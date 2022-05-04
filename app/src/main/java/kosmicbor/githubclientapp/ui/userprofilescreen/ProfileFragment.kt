@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import coil.load
@@ -13,9 +14,9 @@ import com.google.android.material.snackbar.Snackbar
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.app
 import kosmicbor.githubclientapp.databinding.FragmentProfileBinding
+import kosmicbor.githubclientapp.di.qualifiers.ProfileViewModelFactoryQualifier
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
-import kosmicbor.githubclientapp.domain.usecases.ProfileScreenUseCase
 import javax.inject.Inject
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -33,13 +34,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     }
 
     @Inject
-    lateinit var useCase: ProfileScreenUseCase
+    @ProfileViewModelFactoryQualifier
+    lateinit var profileViewModelFactory: ViewModelProvider.Factory
 
     private var userLogin: String? = ""
     private val binding: FragmentProfileBinding by viewBinding(FragmentProfileBinding::bind)
 
     private val viewModel: ProfileViewModel by viewModels {
-        ProfileViewModelFactory(useCase)
+        profileViewModelFactory
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +69,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun initViewModel() {
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-            it?.let { it1 -> Snackbar.make(binding.root, it1, Snackbar.LENGTH_SHORT).show() }
+            it.getContentIfHandled()?.let { message ->
+                Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         viewModel.reposLiveData.observe(viewLifecycleOwner) {

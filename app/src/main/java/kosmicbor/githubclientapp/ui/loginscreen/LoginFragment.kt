@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -13,26 +14,20 @@ import com.google.android.material.snackbar.Snackbar
 import kosmicbor.githubclientapp.R
 import kosmicbor.githubclientapp.app
 import kosmicbor.githubclientapp.databinding.FragmentLoginBinding
+import kosmicbor.githubclientapp.di.qualifiers.LoginViewModelFactoryQualifier
 import kosmicbor.githubclientapp.domain.GithubUser
-import kosmicbor.githubclientapp.domain.usecases.LoginScreenUseCase
 import kosmicbor.githubclientapp.utils.LoginItemTouchHelper
-import kosmicbor.githubclientapp.utils.ResourcesHelper
 import javax.inject.Inject
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     @Inject
-    lateinit var useCase: LoginScreenUseCase
-
-    @Inject
-    lateinit var resourcesHelper: ResourcesHelper
+    @LoginViewModelFactoryQualifier
+    lateinit var loginViewModelFactory: ViewModelProvider.Factory
 
     private val viewModel: LoginViewModel by viewModels {
-        LoginViewModelFactory(
-            useCase,
-            resourcesHelper
-        )
+        loginViewModelFactory
     }
 
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)

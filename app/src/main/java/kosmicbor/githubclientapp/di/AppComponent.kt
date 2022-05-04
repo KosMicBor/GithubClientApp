@@ -14,7 +14,8 @@ import kosmicbor.githubclientapp.ui.userprofilescreen.ProfileFragment
         GithubApiModule::class,
         GithubRepositoryModule::class,
         HttpClientModule::class,
-        UseCasesModule::class
+        UseCasesModule::class,
+        ViewModelsModule::class
     ]
 )
 interface AppComponent {

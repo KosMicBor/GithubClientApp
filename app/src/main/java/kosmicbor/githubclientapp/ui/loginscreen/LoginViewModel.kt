@@ -9,8 +9,9 @@ import kosmicbor.githubclientapp.domain.usecases.LoginScreenUseCase
 import kosmicbor.githubclientapp.utils.EventChecker
 import kosmicbor.githubclientapp.utils.RequestCallback
 import kosmicbor.githubclientapp.utils.ResourcesHelper
+import javax.inject.Inject
 
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
     private val loginScreenUseCase: LoginScreenUseCase,
     private val resourcesHelper: ResourcesHelper
 ) : ViewModel() {
