@@ -10,4 +10,5 @@ interface GitHubRepository {
     fun addUser(user: GithubUser)
     fun updateUser(user: GithubUser)
     fun deleteUser(user: GithubUser)
+    fun clearDisposible()
 }

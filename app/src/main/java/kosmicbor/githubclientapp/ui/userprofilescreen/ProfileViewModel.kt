@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.domain.GithubUserRepo
-import kosmicbor.githubclientapp.domain.usecases.RequestUserFromServerUseCase
-import kosmicbor.githubclientapp.domain.usecases.RequestUserReposFromServerUseCase
+import kosmicbor.githubclientapp.domain.usecases.ProfileScreenUseCase
+import kosmicbor.githubclientapp.utils.EventChecker
 import kosmicbor.githubclientapp.utils.RequestCallback
+import javax.inject.Inject
 
-class ProfileViewModel(
-    private val requestUserFromServerUseCase: RequestUserFromServerUseCase,
-    private val requestUserReposFromServerUseCase: RequestUserReposFromServerUseCase,
+class ProfileViewModel @Inject constructor(
+    private val profileScreenUseCase: ProfileScreenUseCase,
 ) : ViewModel() {
 
     private var _savedLogin = ""
@@ -27,12 +27,12 @@ class ProfileViewModel(
     private val _loadingLiveData = MutableLiveData<Boolean>()
     val loadingLiveData: LiveData<Boolean> = _loadingLiveData
 
-    private val _errorLiveData = MutableLiveData<String?>()
-    val errorLiveData: LiveData<String?> = _errorLiveData
+    private val _errorLiveData = MutableLiveData<EventChecker<String?>>()
+    val errorLiveData: LiveData<EventChecker<String?>> = _errorLiveData
 
     fun getUserRepos(login: String) {
 
-        requestUserReposFromServerUseCase.requestUserReposFromServer(
+        profileScreenUseCase.requestUserReposFromServer(
             login,
             object : RequestCallback<List<GithubUserRepo>> {
                 override fun onSuccess(value: List<GithubUserRepo>) {
@@ -40,7 +40,7 @@ class ProfileViewModel(
                 }
 
                 override fun onError(t: Throwable) {
-                    _errorLiveData.postValue(t.localizedMessage)
+                    _errorLiveData.postValue(EventChecker(t.localizedMessage))
                 }
 
             })
@@ -49,7 +49,7 @@ class ProfileViewModel(
     fun getCurrentUser(login: String) {
         _loadingLiveData.postValue(true)
 
-        requestUserFromServerUseCase.requestUser(login, object : RequestCallback<GithubUser> {
+        profileScreenUseCase.requestUser(login, object : RequestCallback<GithubUser> {
             override fun onSuccess(value: GithubUser) {
                 _loadingLiveData.postValue(false)
                 _userLiveData.postValue(value)
@@ -57,7 +57,7 @@ class ProfileViewModel(
 
             override fun onError(t: Throwable) {
                 _loadingLiveData.postValue(false)
-                _errorLiveData.postValue(t.localizedMessage)
+                _errorLiveData.postValue(EventChecker(t.localizedMessage))
             }
 
         })
@@ -68,8 +68,7 @@ class ProfileViewModel(
     }
 
     override fun onCleared() {
-        requestUserFromServerUseCase.clearDisposable()
-        requestUserReposFromServerUseCase.clearDisposable()
+        profileScreenUseCase.clearDisposable()
         super.onCleared()
     }
 }

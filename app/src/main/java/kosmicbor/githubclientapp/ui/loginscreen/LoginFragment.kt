@@ -5,19 +5,31 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import kosmicbor.githubclientapp.R
+import kosmicbor.githubclientapp.app
 import kosmicbor.githubclientapp.databinding.FragmentLoginBinding
+import kosmicbor.githubclientapp.di.qualifiers.LoginViewModelFactoryQualifier
 import kosmicbor.githubclientapp.domain.GithubUser
 import kosmicbor.githubclientapp.utils.LoginItemTouchHelper
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
+
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
-    private val viewModel: LoginViewModel by viewModel()
+    @Inject
+    @LoginViewModelFactoryQualifier
+    lateinit var loginViewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: LoginViewModel by viewModels {
+        loginViewModelFactory
+    }
+
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
 
     private val loginController by lazy {
@@ -28,6 +40,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requireActivity().app.appComponent.inject(this)
 
         if (savedInstanceState == null) {
             viewModel.getUsersList()
@@ -41,6 +55,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (activity !is LoginController) {
             throw IllegalStateException(getString(R.string.wrong_activity_error_message))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //viewModel.getUsersList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +94,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-            it?.let { errorMessage ->
+            it.getContentIfHandled()?.let { errorMessage ->
                 Snackbar.make(
                     binding.root,
                     errorMessage,
